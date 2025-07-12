@@ -2,8 +2,6 @@
 export enum ENUM_USER_ROLE {
   SUPER_ADMIN = 'SUPER_ADMIN',
   ADMIN = 'ADMIN',
-  USER = 'USER',
-  PARTNER = 'PARTNER',
 }
 
 export enum ENUM_SOCKET_EVENT {

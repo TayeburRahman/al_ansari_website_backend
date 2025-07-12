@@ -6,8 +6,6 @@ import ApiError from "../../../errors/ApiError";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import { logger } from "../../../shared/logger";
 import Auth from "./auth.model";
-import Partner from "../partner/partner.model";
-
 import sendEmail from "../../../utils/sendEmail";
 import { ENUM_USER_ROLE } from "../../../enums/user";
 import { sendResetEmail } from "./sendResetMails";
@@ -16,7 +14,6 @@ import { registrationSuccessEmailBody } from "../../../mails/user.register";
 import { resetEmailTemplate } from "../../../mails/reset.email";
 import { ActivationPayload, ChangePasswordPayload, ForgotPasswordPayload, IAuth, LoginPayload, ResetPasswordPayload } from "./auth.interface";
 import config from "../../../config";
-import User from "../user/user.model";
 import Admin from "../admin/admin.model";
 
 const registrationAccount = async (payload: IAuth) => {
@@ -39,12 +36,13 @@ const registrationAccount = async (payload: IAuth) => {
 
   if (existingAuth && !existingAuth.isActive) {
     await Promise.all([
-      existingAuth.role === "USER" && User.deleteOne({ authId: existingAuth._id }),
-      existingAuth.role === "PARTNER" && Partner.deleteOne({ authId: existingAuth._id }),
-      existingAuth.role === "ADMIN" && Admin.deleteOne({ authId: existingAuth._id }),
+      (existingAuth.role === "ADMIN" || existingAuth.role === "SUPER_ADMIN")
+        ? Admin.deleteOne({ authId: existingAuth._id })
+        : Promise.resolve(),
       Auth.deleteOne({ email }),
     ]);
   }
+
 
   const { activationCode } = createActivationToken();
   const auth = {
@@ -56,22 +54,17 @@ const registrationAccount = async (payload: IAuth) => {
     expirationTime: Date.now() + 3 * 60 * 1000,
   };
 
-  if (role === "USER" || role === "PARTNER") {
-    console.log("==============", auth);
-    sendEmail({
-      email: auth.email,
-      subject: "Activate Your Account",
-      html: registrationSuccessEmailBody({
-        user: { name: auth.name },
-        activationCode,
-      }),
-    }).catch((error) => console.error("Failed to send email:", error.message));
-  }
+  await sendEmail({
+    email: auth.email,
+    subject: "Activate Your Account",
+    html: registrationSuccessEmailBody({
+      user: { name: auth.name },
+      activationCode,
+    }),
+  }).catch((error) => console.error("Failed to send email:", error.message));
 
-  let createAuth;
-  if (role !== ENUM_USER_ROLE.SUPER_ADMIN) {
-    createAuth = await Auth.create(auth);
-  }
+  const createAuth = await Auth.create(auth);
+
   if (!createAuth) {
     throw new ApiError(500, "Failed to create auth account");
   }
@@ -79,23 +72,9 @@ const registrationAccount = async (payload: IAuth) => {
   other.authId = createAuth._id;
   other.email = email;
 
-  console.log("Account", auth)
 
   // Role-based user creation
-  let result;
-  switch (role) {
-    case ENUM_USER_ROLE.USER:
-      result = await User.create(other);
-      break;
-    case ENUM_USER_ROLE.ADMIN:
-      result = await Admin.create(other);
-      break;
-    case ENUM_USER_ROLE.PARTNER:
-      result = await Partner.create(other);
-      break;
-    default:
-      throw new ApiError(400, "Invalid role provided!");
-  }
+  const result = await Admin.create(other);
 
   return { result, role, message: "Account created successfully!" };
 };
@@ -119,20 +98,7 @@ const activateAccount = async (payload: ActivationPayload) => {
     }
   );
 
-  let result = {} as any;
-
-  if (existAuth.role === ENUM_USER_ROLE.USER) {
-    result = await User.findOne({ authId: existAuth._id });
-  } else if (
-    existAuth.role === ENUM_USER_ROLE.ADMIN ||
-    existAuth.role === ENUM_USER_ROLE.SUPER_ADMIN
-  ) {
-    result = await Admin.findOne({ authId: existAuth._id });
-  } else if (existAuth.role === ENUM_USER_ROLE.PARTNER) {
-    result = await Partner.findOne({ authId: existAuth._id });
-  } else {
-    throw new ApiError(400, "Invalid role provided!");
-  }
+  const result = await Admin.findOne({ authId: existAuth._id }) as any;
 
   const accessToken = jwtHelpers.createToken(
     {
@@ -143,6 +109,7 @@ const activateAccount = async (payload: ActivationPayload) => {
     config.jwt.secret as string,
     config.jwt.expires_in as string
   );
+
   const refreshToken = jwtHelpers.createToken(
     { authId: existAuth._id, userId: result._id, role: existAuth.role },
     config.jwt.refresh_secret as string,
@@ -178,30 +145,9 @@ const loginAccount = async (payload: LoginPayload) => {
   }
 
   const { _id: authId } = isAuth;
-  let userDetails: any;
-  let role;
+  const userDetails = await Admin.findOne({ authId: isAuth._id }).populate("authId") as any;
+  const role = isAuth.role
 
-  console.log("role", role)
-  switch (isAuth.role) {
-    case ENUM_USER_ROLE.USER:
-      userDetails = await User.findOne({ authId: isAuth._id }).populate("authId");
-      role = ENUM_USER_ROLE.USER;
-      break;
-    case ENUM_USER_ROLE.PARTNER:
-      userDetails = await Partner.findOne({ authId: isAuth._id }).populate("authId");
-      role = ENUM_USER_ROLE.PARTNER;
-      break;
-    case ENUM_USER_ROLE.ADMIN:
-      userDetails = await Admin.findOne({ authId: isAuth._id }).populate("authId");
-      role = ENUM_USER_ROLE.ADMIN;
-      break;
-    case ENUM_USER_ROLE.SUPER_ADMIN:
-      userDetails = await Admin.findOne({ authId: isAuth._id }).populate("authId");
-      role = ENUM_USER_ROLE.SUPER_ADMIN;
-      break;
-    default:
-      throw new ApiError(400, "Invalid role provided!");
-  }
 
   const accessToken = jwtHelpers.createToken(
     { authId, role, userId: userDetails._id },
