@@ -1,5 +1,5 @@
- 
-import { Request, RequestHandler, Response } from 'express';  
+
+import { Request, RequestHandler, Response } from 'express';
 import catchAsync from '../../../shared/catchasync';
 import { AuthService } from './auth.service';
 import sendResponse from '../../../shared/sendResponse';
@@ -8,10 +8,7 @@ import { IReqUser } from './auth.interface';
 
 const registrationAccount = catchAsync(async (req: Request, res: Response) => {
   const { role } = await AuthService.registrationAccount(req.body);
-  const message =
-    role === "USER"
-      ? "Please check your email for the activation OTP code."
-      : "Your account is awaiting admin approval.";
+  const message = "Please check your email for the activation OTP code."
 
   sendResponse(res, {
     statusCode: 200,
@@ -140,4 +137,3 @@ export const AuthController = {
   resendCodeActivationAccount,
   resendCodeForgotAccount,
 };
- 

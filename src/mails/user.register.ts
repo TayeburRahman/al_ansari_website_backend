@@ -50,12 +50,12 @@ export const registrationSuccessEmailBody = (userData: any) => `
     </head>
     <body>
       <div class="container">
-        <h1>Welcome to Tourist Platform App</h1>
+        <h1>Welcome toAnsari Website</h1>
         <p>Hello ${userData?.user?.name},</p>
-        <p>Thank you for registering with Tourist Platform App. To activate your account, please use the following activation code:</p>
+        <p>Thank you for registering withAnsari Website. To activate your account, please use the following activation code:</p>
         <h1>${userData?.activationCode}</h1>
         <p>Please enter this code on the activation page within the next 5 minutes.</p>
-        <p>If you didn't register for Tourist Platform App, please ignore this email.</p>
+        <p>If you didn't register forAnsari Website, please ignore this email.</p>
         <p>If you have any questions, please contact us at <a href="mailto:yeasinarafat1734@gmail.com">yeasinarafat1734@gmail.com</a>.</p>
       </div>
     </body>

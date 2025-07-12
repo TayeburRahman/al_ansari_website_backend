@@ -11,7 +11,7 @@ export const app: Application = express();
 app.use(
   cors({
     origin: [
-      'http://192.168.10.16:3000', 
+      'http://192.168.10.16:3000',
     ],
     credentials: true,
   }),
@@ -28,7 +28,7 @@ app.use(express.static('uploads'));
 app.use('/', routes);
 
 app.get('/', async (req: Request, res: Response) => {
-  res.json('Welcome to Trading App');
+  res.json('Welcome to- al ansari website backend');
 });
 
 app.use(globalErrorHandler);

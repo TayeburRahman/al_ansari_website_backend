@@ -31,8 +31,7 @@ const AdminSchema = new mongoose.Schema<IAdmin>(
       default: null,
     },
     phone_number: {
-      type: String,
-      required: true,
+      type: String
     },
     address: {
       type: String,

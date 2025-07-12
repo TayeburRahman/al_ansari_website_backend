@@ -1,10 +1,10 @@
 interface ResetEmailTemplateData {
-    name: string;
-    verifyCode: string;
-    verifyExpire: number;
-  }
-  
-  const resetEmailTemplate = (data: ResetEmailTemplateData): string => `
+  name: string;
+  verifyCode: string;
+  verifyExpire: number;
+}
+
+const resetEmailTemplate = (data: ResetEmailTemplateData): string => `
     <html>
       <head>
         <style>
@@ -92,13 +92,12 @@ interface ResetEmailTemplateData {
             <p>Thank you,<br>The Support Team</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} Tourist Platform App. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()}Ansari Website. All rights reserved.</p>
             <p><a href="https://yourwebsite.com/privacy">Privacy Policy</a> | <a href="https://yourwebsite.com/contact">Contact Support</a></p>
           </div>
         </div>
       </body>
     </html>
   `;
-  
-  export { resetEmailTemplate };
-  
+
+export { resetEmailTemplate };

@@ -22,6 +22,7 @@ const registrationAccount = async (payload: IAuth) => {
   if (!role || !Object.values(ENUM_USER_ROLE).includes(role as any)) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Valid Role is required!");
   }
+
   if (!password || !confirmPassword || !email) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email, Password, and Confirm Password are required!");
   }
@@ -423,12 +424,11 @@ const resendCodeForgotAccount = async (payload: ForgotPasswordPayload) => {
 cron.schedule("* * * * *", async () => {
   try {
     const now = new Date();
-    const result = await Auth.updateMany(
-      {
-        isActive: false,
-        expirationTime: { $lte: now },
-        activationCode: { $ne: null },
-      },
+    const result = await Auth.updateMany({
+      isActive: false,
+      expirationTime: { $lte: now },
+      activationCode: { $ne: null },
+    },
       {
         $unset: { activationCode: "" },
       }
