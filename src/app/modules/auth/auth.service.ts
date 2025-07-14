@@ -55,6 +55,8 @@ const registrationAccount = async (payload: IAuth) => {
     expirationTime: Date.now() + 3 * 60 * 1000,
   };
 
+  console.log('activationCode', activationCode)
+
   await sendEmail({
     email: auth.email,
     subject: "Activate Your Account",
@@ -126,6 +128,8 @@ const activateAccount = async (payload: ActivationPayload) => {
 
 const loginAccount = async (payload: LoginPayload) => {
   const { email, password } = payload;
+
+  console.log("email", email)
 
   const isAuth = await Auth.isAuthExist(email);
 
