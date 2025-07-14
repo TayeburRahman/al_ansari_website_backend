@@ -61,6 +61,78 @@ router.delete(
 
 router.get('/sector', DashboardController.getAllSectorsController);
 router.get('/sector/:id', DashboardController.getSectorByIdController);
+// ==============================
+router.post(
+    '/updates',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.createUpdatesController
+);
+
+router.put(
+    '/updates/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.updateUpdatesController
+);
+
+router.delete(
+    '/updates/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.deleteUpdatesController
+);
+
+router.get('/updates', DashboardController.getAllUpdatesController);
+router.get('/updates/:id', DashboardController.getUpdatesByIdController);
+
+// ==============================
+router.post(
+    '/events',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.createEventsController
+);
+
+router.put(
+    '/events/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.updateEventsController
+);
+
+router.delete(
+    '/events/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.deleteEventsController
+);
+
+router.get('/events', DashboardController.getAllEventsController);
+router.get('/events/:id', DashboardController.getEventsByIdController);
+
+// ==============================
+router.post(
+    '/newsletters',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.createNewslettersController
+);
+
+router.put(
+    '/newsletters/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.updateNewslettersController
+);
+
+router.delete(
+    '/newsletters/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.deleteNewslettersController
+);
+
+router.get('/newsletters', DashboardController.getAllNewslettersController);
+router.get('/newsletters/:id', DashboardController.getNewslettersByIdController);
+
 // ============================
 router.put('/terms', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), DashboardController.upsertTermsController);
 router.get('/terms', DashboardController.getTermsController);

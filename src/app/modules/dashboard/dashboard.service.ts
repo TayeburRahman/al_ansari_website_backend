@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { IPerson, IRequest, ISector } from "./dashboard.interface";
-import { Disclaimer, Person, Privacy, Sector, Terms } from "./dashboard.model";
+import { Disclaimer, Events, Newsletters, Person, Privacy, Sector, Terms, Updates } from "./dashboard.model";
 
 
 const mapPersonFields = (body: any, profileImage?: string) => {
@@ -88,11 +88,16 @@ const deletePerson = async (id: string): Promise<boolean> => {
 // =================================
 const createSector = async (req: IRequest): Promise<ISector> => {
     const { body, files } = req;
-    const payload = {
+
+    const payload: Partial<ISector> = {
         title: body.title,
         description: body.description,
-        image: files ? `/uploads/sectors/${files.filename}` : undefined,
     };
+
+    if (files?.image && files.image.length > 0) {
+        payload.image = `/images/image/${files.image[0].filename}`;
+    }
+
     return await Sector.create(payload);
 };
 
@@ -113,8 +118,11 @@ const updateSector = async (id: string, req: IRequest): Promise<ISector | null> 
     const updatePayload: Partial<ISector> = {
         title: body.title,
         description: body.description,
-        ...(files && { image: `/uploads/sectors/${files.filename}` }),
     };
+
+    if (files?.image && files.image.length > 0) {
+        updatePayload.image = `/images/image/${files.image[0].filename}`;
+    }
 
     return await Sector.findByIdAndUpdate(id, updatePayload, {
         new: true,
@@ -125,6 +133,159 @@ const updateSector = async (id: string, req: IRequest): Promise<ISector | null> 
 const deleteSector = async (id: string): Promise<boolean> => {
     if (!Types.ObjectId.isValid(id)) return false;
     const result = await Sector.findByIdAndDelete(id);
+    return !!result;
+};
+
+// =Updates================================
+const createUpdates = async (req: IRequest): Promise<ISector> => {
+    const { body, files } = req;
+
+    const payload: Partial<ISector> = {
+        title: body.title,
+        description: body.description,
+    };
+
+    if (files?.image && files.image.length > 0) {
+        payload.image = `/images/image/${files.image[0].filename}`;
+    }
+
+    return await Updates.create(payload);
+};
+
+const getAllUpdates = async (): Promise<ISector[]> => {
+    return await Updates.find().sort({ createdAt: -1 });
+};
+
+const getUpdatesById = async (id: string): Promise<ISector | null> => {
+    if (!Types.ObjectId.isValid(id)) return null;
+    return await Updates.findById(id);
+};
+
+const updateUpdates = async (id: string, req: IRequest): Promise<ISector | null> => {
+    if (!Types.ObjectId.isValid(id)) return null;
+
+    const { body, files } = req;
+
+    const updatePayload: Partial<ISector> = {
+        title: body.title,
+        description: body.description,
+    };
+
+    if (files?.image && files.image.length > 0) {
+        updatePayload.image = `/images/image/${files.image[0].filename}`;
+    }
+
+    return await Updates.findByIdAndUpdate(id, updatePayload, {
+        new: true,
+        runValidators: true,
+    });
+};
+
+const deleteUpdates = async (id: string): Promise<boolean> => {
+    if (!Types.ObjectId.isValid(id)) return false;
+    const result = await Updates.findByIdAndDelete(id);
+    return !!result;
+};
+
+// =Events================================
+const createEvents = async (req: IRequest): Promise<ISector> => {
+
+    const { body, files } = req;
+
+    const payload: Partial<ISector> = {
+        title: body.title,
+        description: body.description,
+    };
+
+    if (files?.image && files.image.length > 0) {
+        payload.image = `/images/image/${files.image[0].filename}`;
+    }
+
+    return await Events.create(payload);
+};
+
+const getAllEvents = async (): Promise<ISector[]> => {
+    return await Events.find().sort({ createdAt: -1 });
+};
+
+const getEventsById = async (id: string): Promise<ISector | null> => {
+    if (!Types.ObjectId.isValid(id)) return null;
+    return await Events.findById(id);
+};
+
+const updateEvents = async (id: string, req: IRequest): Promise<ISector | null> => {
+    if (!Types.ObjectId.isValid(id)) return null;
+
+    const { body, files } = req;
+
+    const updatePayload: Partial<ISector> = {
+        title: body.title,
+        description: body.description,
+    };
+
+    if (files?.image && files.image.length > 0) {
+        updatePayload.image = `/images/image/${files.image[0].filename}`;
+    }
+
+    return await Events.findByIdAndUpdate(id, updatePayload, {
+        new: true,
+        runValidators: true,
+    });
+};
+
+const deleteEvents = async (id: string): Promise<boolean> => {
+    if (!Types.ObjectId.isValid(id)) return false;
+    const result = await Events.findByIdAndDelete(id);
+    return !!result;
+};
+// =Events================================
+const createNewsletters = async (req: IRequest): Promise<ISector> => {
+    const { body, files } = req;
+
+    const payload: Partial<ISector> = {
+        title: body.title,
+        description: body.description,
+    };
+
+    if (files?.image && files.image.length > 0) {
+        payload.image = `/images/image/${files.image[0].filename}`;
+    }
+
+    return await Newsletters.create(payload);
+};
+
+const getAllNewsletters = async (): Promise<ISector[]> => {
+    return await Newsletters.find().sort({ createdAt: -1 });
+};
+
+const getNewslettersById = async (id: string): Promise<ISector | null> => {
+    if (!Types.ObjectId.isValid(id)) return null;
+    return await Newsletters.findById(id);
+};
+
+const updateNewsletters = async (id: string, req: IRequest): Promise<ISector | null> => {
+    if (!Types.ObjectId.isValid(id)) return null;
+
+    const { body, files } = req;
+
+    const updatePayload: Partial<ISector> = {
+        title: body.title,
+        description: body.description,
+    };
+
+    if (files?.image && files.image.length > 0) {
+        updatePayload.image = `/images/image/${files.image[0].filename}`;
+    }
+
+    return await Newsletters.findByIdAndUpdate(id, updatePayload, {
+        new: true,
+        runValidators: true,
+    });
+};
+
+const deleteNewsletters = async (id: string): Promise<boolean> => {
+    if (!Types.ObjectId.isValid(id)) return false;
+    const result = await Newsletters.findByIdAndDelete(id);
     return !!result;
 };
 
@@ -195,5 +356,20 @@ export const DashboardService = {
     updateSector,
     getSectorById,
     getAllSectors,
-    createSector
+    createSector,
+    updateUpdates,
+    deleteUpdates,
+    createUpdates,
+    getAllUpdates,
+    getUpdatesById,
+    deleteEvents,
+    updateEvents,
+    getAllEvents,
+    getEventsById,
+    createEvents,
+    createNewsletters,
+    getAllNewsletters,
+    getNewslettersById,
+    updateNewsletters,
+    deleteNewsletters
 };
