@@ -3,6 +3,7 @@ import { IPerson, IRequest, ISector } from "./dashboard.interface";
 import { Disclaimer, Events, Newsletters, Person, Privacy, Sector, Terms, Updates } from "./dashboard.model";
 
 
+
 const mapPersonFields = (body: any, profileImage?: string) => {
     const parseArray = (value: any): string[] => {
         try {
@@ -19,7 +20,7 @@ const mapPersonFields = (body: any, profileImage?: string) => {
         category: body.category,
         phoneNumber: body.phoneNumber,
         bio: body.bio,
-        professional: body.professional,
+        professional: parseArray(body.professional),
         education: body.education,
         barAdmission: body.barAdmission,
         awards: parseArray(body.awards),
@@ -77,6 +78,8 @@ const updatePerson = async (id: string, req: IRequest): Promise<IPerson | null> 
         : undefined;
 
     const updateData = mapPersonFields(body, profileImage);
+
+    // console.log("updateData", body)
 
     const updatedPerson = await Person.findByIdAndUpdate(id, updateData, {
         new: true,
@@ -212,6 +215,7 @@ const createEvents = async (req: IRequest): Promise<ISector> => {
 };
 
 const getAllEvents = async (): Promise<ISector[]> => {
+
     return await Events.find().sort({ createdAt: -1 });
 };
 
@@ -245,7 +249,7 @@ const deleteEvents = async (id: string): Promise<boolean> => {
     const result = await Events.findByIdAndDelete(id);
     return !!result;
 };
-// =Events================================
+// =News================================
 const createNewsletters = async (req: IRequest): Promise<ISector> => {
     const { body, files } = req;
 

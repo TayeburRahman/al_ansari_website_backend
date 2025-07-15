@@ -7,21 +7,21 @@ const PersonSchema: Schema<IPerson> = new Schema({
     email: { type: String, required: true },
     phoneNumber: { type: String, },
     bio: { type: String, required: true },
-    professional: { type: String, },
+    professional: [{ type: String, }],
     education: { type: String, },
     barAdmission: { type: String, },
     awards: [{ type: String, }],
     practice: [{ type: String, }],
     industry: [{ type: String, }],
-    experience: { type: String, },
-    affiliation: { type: String, },
+    // experience: { type: String, },
+    // affiliation: { type: String, },
     category: { type: String, required: true },
-    socialLinks: {
-        facebook: { type: String },
-        twitter: { type: String },
-        instagram: { type: String },
-        linkedin: { type: String }
-    },
+    // socialLinks: {
+    //     facebook: { type: String },
+    //     twitter: { type: String },
+    //     instagram: { type: String },
+    //     linkedin: { type: String }
+    // },
     profile_image: { type: String }
 }, {
     timestamps: true
