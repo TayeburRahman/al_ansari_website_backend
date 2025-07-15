@@ -39,8 +39,8 @@ const getPersonByIdController = catchAsync(async (req: Request, res: Response) =
     });
 });
 
-const getAllPeopleController = catchAsync(async (_req: Request, res: Response) => {
-    const result = await DashboardService.getAllPeople();
+const getAllPeopleController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.getAllPeople(req as any);
     sendResponse(res, {
         statusCode: 200,
         success: true,

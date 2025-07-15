@@ -16,12 +16,13 @@ const mapPersonFields = (body: any, profileImage?: string) => {
         fullName: body.fullName,
         position: body.position,
         email: body.email,
+        category: body.category,
         phoneNumber: body.phoneNumber,
         bio: body.bio,
         professional: body.professional,
         education: body.education,
         barAdmission: body.barAdmission,
-        sectors: parseArray(body.sectors),
+        awards: parseArray(body.awards),
         practice: parseArray(body.practice),
         industry: parseArray(body.industry),
         experience: body.experience,
@@ -49,7 +50,13 @@ const createPerson = async (req: IRequest): Promise<IPerson> => {
     return newPerson;
 };
 
-const getAllPeople = async (): Promise<IPerson[]> => {
+const getAllPeople = async (req: any): Promise<IPerson[]> => {
+    const category = req?.query?.category;
+
+    if (category) {
+        return await Person.find({ category });
+    }
+
     return await Person.find()
 };
 

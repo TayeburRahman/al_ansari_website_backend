@@ -27,7 +27,8 @@ export interface IPerson extends Document {
     education: string;
     barAdmission: string;
     professional: string;
-    sectors: [string];
+    awards: [string];
+    category: string;
     experience: string;
     practice: [string];
     industry: [string];
