@@ -207,7 +207,6 @@ const deleteEventsController = catchAsync(async (req: Request, res: Response) =>
         data: null,
     });
 });
-// =============================
 // ===========================
 const createNewslettersController = catchAsync(async (req: Request, res: Response) => {
     const result = await DashboardService.createNewsletters(req as any);
@@ -254,6 +253,106 @@ const deleteNewslettersController = catchAsync(async (req: Request, res: Respons
         statusCode: deleted ? 200 : 404,
         success: deleted,
         message: deleted ? 'Newsletters deleted successfully.' : 'Newsletters not found.',
+        data: null,
+    });
+});
+
+// ===========================
+const createCSRController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.createCSR(req as any);
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: 'CSR created successfully.',
+        data: result,
+    });
+});
+
+const getAllCSRController = catchAsync(async (_req: Request, res: Response) => {
+    const result = await DashboardService.getAllCSR();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'CSR retrieved successfully.',
+        data: result,
+    });
+});
+const getCSRByIdController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.getCSRById(req.params.id);
+    sendResponse(res, {
+        statusCode: result ? 200 : 404,
+        success: !!result,
+        message: result ? 'CSR retrieved successfully.' : 'CSR not found.',
+        data: result,
+    });
+});
+
+const updateCSRController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.updateCSR(req.params.id, req as any);
+    sendResponse(res, {
+        statusCode: result ? 200 : 404,
+        success: !!result,
+        message: result ? 'CSR updated successfully.' : 'CSR not found or update failed.',
+        data: result,
+    });
+});
+
+const deleteCSRController = catchAsync(async (req: Request, res: Response) => {
+    const deleted = await DashboardService.deleteCSR(req.params.id);
+    sendResponse(res, {
+        statusCode: deleted ? 200 : 404,
+        success: deleted,
+        message: deleted ? 'CSR deleted successfully.' : 'CSR not found.',
+        data: null,
+    });
+});
+
+// ===========================
+const createAwardController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.createAward(req as any);
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: 'Award created successfully.',
+        data: result,
+    });
+});
+
+const getAllAwardController = catchAsync(async (_req: Request, res: Response) => {
+    const result = await DashboardService.getAllAward();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Award retrieved successfully.',
+        data: result,
+    });
+});
+const getAwardByIdController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.getAwardById(req.params.id);
+    sendResponse(res, {
+        statusCode: result ? 200 : 404,
+        success: !!result,
+        message: result ? 'Award retrieved successfully.' : 'Award not found.',
+        data: result,
+    });
+});
+
+const updateAwardController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.updateAward(req.params.id, req as any);
+    sendResponse(res, {
+        statusCode: result ? 200 : 404,
+        success: !!result,
+        message: result ? 'Award updated successfully.' : 'Award not found or update failed.',
+        data: result,
+    });
+});
+
+const deleteAwardController = catchAsync(async (req: Request, res: Response) => {
+    const deleted = await DashboardService.deleteCSR(req.params.id);
+    sendResponse(res, {
+        statusCode: deleted ? 200 : 404,
+        success: deleted,
+        message: deleted ? 'Award deleted successfully.' : 'Award not found.',
         data: null,
     });
 });
@@ -348,5 +447,15 @@ export const DashboardController = {
     getAllNewslettersController,
     updateNewslettersController,
     createNewslettersController,
-    getNewslettersByIdController
+    getNewslettersByIdController,
+    createCSRController,
+    getAllCSRController,
+    getCSRByIdController,
+    updateCSRController,
+    deleteCSRController,
+    createAwardController,
+    getAllAwardController,
+    deleteAwardController,
+    updateAwardController,
+    getAwardByIdController
 };

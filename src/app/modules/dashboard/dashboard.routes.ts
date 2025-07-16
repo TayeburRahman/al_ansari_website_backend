@@ -133,6 +133,55 @@ router.delete(
 router.get('/newsletters', DashboardController.getAllNewslettersController);
 router.get('/newsletters/:id', DashboardController.getNewslettersByIdController);
 
+// ==============================
+router.post(
+    '/csr',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.createCSRController // 
+);
+
+router.put(
+    '/csr/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.updateCSRController
+);
+
+router.delete(
+    '/csr/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.deleteCSRController
+);
+
+router.get('/csr', DashboardController.getAllCSRController);
+router.get('/csr/:id', DashboardController.getCSRByIdController);
+
+// ==============================
+router.post(
+    '/award',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.createAwardController
+);
+
+router.put(
+    '/award/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.updateAwardController
+);
+
+router.delete(
+    '/award/:id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.deleteAwardController
+);
+
+router.get('/award', DashboardController.getAllAwardController);
+router.get('/award/:id', DashboardController.getAwardByIdController);
+
+
 // ============================
 router.put('/terms', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), DashboardController.upsertTermsController);
 router.get('/terms', DashboardController.getTermsController);

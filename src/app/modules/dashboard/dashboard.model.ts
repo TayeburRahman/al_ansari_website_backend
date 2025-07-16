@@ -74,6 +74,25 @@ const NewslettersSchema: Schema<ISector> = new Schema({
     timestamps: true
 });
 
+
+
+const CSRSchema: Schema<ISector> = new Schema({
+    title: { type: String },
+    description: { type: String },
+    image: { type: String }
+}, {
+    timestamps: true
+});
+
+
+const awardSchema: Schema<ISector> = new Schema({
+    title: { type: String },
+    description: { type: String },
+    image: { type: String }
+}, {
+    timestamps: true
+});
+
 const Newsletters: Model<ISector> = mongoose.model<ISector>('Newsletters', NewslettersSchema);
 const Events: Model<ISector> = mongoose.model<ISector>('Events', EventsSchema);
 const Updates: Model<ISector> = mongoose.model<ISector>('Update', UpdatesSchema);
@@ -81,7 +100,9 @@ const Sector: Model<ISector> = mongoose.model<ISector>('Sector', SectorSchema);
 const Person: Model<IPerson> = mongoose.model<IPerson>('Person', PersonSchema);
 const Privacy: Model<IPrivacy> = mongoose.model<IPrivacy>('Privacy', PrivacySchema);
 const Terms: Model<IPrivacy> = mongoose.model<IPrivacy>('Terms', TermsSchema);
+const CSR: Model<ISector> = mongoose.model<ISector>('CSR', CSRSchema);
+const Award: Model<ISector> = mongoose.model<ISector>('Award', awardSchema);
+
 const Disclaimer: Model<IPrivacy> = mongoose.model<IPrivacy>('Disclaimer', DisclaimerSchema);
 
-
-export { Person, Sector, Privacy, Terms, Disclaimer, Updates, Events, Newsletters };
+export { Person, Sector, Privacy, Terms, Disclaimer, Updates, Events, Newsletters, CSR, Award };
