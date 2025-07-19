@@ -48,6 +48,18 @@ const getAllPeopleController = catchAsync(async (req: Request, res: Response) =>
         data: result,
     });
 });
+
+const getAllSearch = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.getAllSearch(req as any);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'All retrieved successfully.',
+        data: result,
+    });
+});
+
 const deletePersonController = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const deleted = await DashboardService.deletePerson(id);
@@ -416,7 +428,51 @@ const getDisclaimerController = catchAsync(async (_req: Request, res: Response) 
         data: result,
     });
 });
+
+// ================================
+const upsertFraudController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.upsertFraud(req.body);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Fraud updated successfully.',
+        data: result,
+    });
+});
+
+const getFraudController = catchAsync(async (_req: Request, res: Response) => {
+    const result = await DashboardService.getFraud();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Fraud retrieved successfully.',
+        data: result,
+    });
+});
+
+// ================================
+const upsertAboutUsController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.upsertAboutUs(req.body);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'About updated successfully.',
+        data: result,
+    });
+});
+
+const getAboutUsController = catchAsync(async (_req: Request, res: Response) => {
+    const result = await DashboardService.getAboutUs();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'About retrieved successfully.',
+        data: result,
+    });
+});
+
 export const DashboardController = {
+    getAllSearch,
     getAllPeopleController,
     getPersonByIdController,
     updatePersonController,
@@ -457,5 +513,9 @@ export const DashboardController = {
     getAllAwardController,
     deleteAwardController,
     updateAwardController,
-    getAwardByIdController
+    getAwardByIdController,
+    upsertFraudController,
+    getFraudController,
+    upsertAboutUsController,
+    getAboutUsController
 };

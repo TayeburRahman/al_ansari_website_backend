@@ -137,7 +137,7 @@ const loginAccount = async (payload: LoginPayload) => {
     throw new ApiError(404, "User does not exist");
   }
   if (!isAuth.isActive) {
-    throw new ApiError(401, "Please activate your account then try to login");
+    throw new ApiError(404, "Please activate your account then try to login");
   }
   if (isAuth.is_block) {
     throw new ApiError(403, "You are blocked. Contact support");
@@ -146,7 +146,7 @@ const loginAccount = async (payload: LoginPayload) => {
     isAuth.password &&
     !(await Auth.isPasswordMatched(password, isAuth.password))
   ) {
-    throw new ApiError(401, "Password is incorrect");
+    throw new ApiError(404, "Password is incorrect");
   }
 
   const { _id: authId } = isAuth;

@@ -8,7 +8,7 @@ const router = express.Router();
 
 // -------------------- Protected Routes -------------------- //
 // All routes require ADMIN or SUPER_ADMIN roles
-
+router.get('/search', DashboardController.getAllSearch);
 router.post(
     '/person',
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
@@ -185,6 +185,14 @@ router.get('/award/:id', DashboardController.getAwardByIdController);
 // ============================
 router.put('/terms', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), DashboardController.upsertTermsController);
 router.get('/terms', DashboardController.getTermsController);
+
+// ============================
+router.put('/fraud', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), DashboardController.upsertFraudController);
+router.get('/fraud', DashboardController.getFraudController);
+
+// ============================
+router.put('/about_us', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), DashboardController.upsertAboutUsController);
+router.get('/about_us', DashboardController.getAboutUsController);
 
 // --- Privacy Policy ---
 router.put('/privacy', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), DashboardController.upsertPrivacyController);

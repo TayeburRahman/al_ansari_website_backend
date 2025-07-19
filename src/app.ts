@@ -14,6 +14,8 @@ app.use(
       'http://192.168.10.16:3000',
       "http://localhost:3000",
       "http://10.0.60.52:3000",
+      "http://10.0.60.199:3000",
+      "https://al-ansari-website-integration.vercel.app"
     ],
     credentials: true,
   }),

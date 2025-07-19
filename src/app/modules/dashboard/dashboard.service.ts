@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
 import { IPerson, IRequest, ISector } from "./dashboard.interface";
-import { Award, CSR, Disclaimer, Events, Newsletters, Person, Privacy, Sector, Terms, Updates } from "./dashboard.model";
+import { About, Award, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, Terms, Updates } from "./dashboard.model";
+import AppError from "../../../errors/AppError";
+import ApiError from "../../../errors/ApiError";
 
 const testData = [
     {
@@ -107,6 +109,47 @@ const getAllPeople = async (req: any): Promise<IPerson[]> => {
 
     return await Person.find()
 };
+
+const getAllSearch = async (req: any) => {
+    try {
+        const searchTerm = req.query?.searchTerm?.trim();
+
+
+        const regex = new RegExp(searchTerm, "i");
+
+        const [persons, updates, sectors, events, newsletters] = await Promise.all([
+            Person.find({
+                $or: [
+                    { fullName: regex },
+                    { position: regex },
+                    { bio: regex },
+                    { category: regex }
+                ],
+            }).select("fullName profile_image"),
+            Updates.find({ $or: [{ title: regex }, { description: regex }] }).select("title image"),
+            Sector.find({ $or: [{ title: regex }, { description: regex }] }).select("title image"),
+            Events.find({ $or: [{ title: regex }, { description: regex }] }).select("title image"),
+            Newsletters.find({ $or: [{ title: regex }, { description: regex }] }).select("title image"),
+
+
+        ]);
+
+        const results = [
+            ...persons.map(p => ({ title: p.fullName, type: "person", id: p?._id, images: p?.profile_image })),
+            ...updates.map(u => ({ title: u.title, type: "update", id: u?._id, images: u?.image })),
+            ...sectors.map(s => ({ title: s.title, type: "sector", id: s?._id, images: s?.image })),
+            ...events.map(e => ({ title: e.title, type: "event", id: e?._id, images: e?.image })),
+            ...newsletters.map(n => ({ title: n.title, type: "newsletter", id: n?._id, images: n?.image })),
+        ];
+
+        return results;
+    } catch (err) {
+        console.error("Global search error:", err);
+        throw new ApiError(404, "Something went wrong");
+    }
+};
+
+
 
 const getPersonById = async (id: string): Promise<IPerson | null> => {
     if (!Types.ObjectId.isValid(id)) return null;
@@ -546,7 +589,44 @@ const deleteAward = async (id: string): Promise<boolean> => {
     const result = await Award.findByIdAndDelete(id);
     return !!result;
 };
+// ==========================
+const upsertFraud = async (payload: any) => {
+    const checkIsExist = await Fraud.findOne();
+    if (checkIsExist) {
+        return await Fraud.findOneAndUpdate({}, payload, {
+            new: true,
+
+            runValidators: true,
+        });
+    } else {
+        return await Fraud.create(payload);
+    }
+};
+
+const getFraud = async () => {
+    return await Fraud.findOne();
+};
+
+// ==========================
+const upsertAboutUs = async (payload: any) => {
+    const checkIsExist = await About.findOne();
+    if (checkIsExist) {
+        return await About.findOneAndUpdate({}, payload, {
+            new: true,
+
+            runValidators: true,
+        });
+    } else {
+        return await About.create(payload);
+    }
+};
+
+const getAboutUs = async () => {
+    return await About.findOne();
+};
+
 export const DashboardService = {
+    getAllSearch,
     createPerson,
     getAllPeople,
     getPersonById,
@@ -588,4 +668,8 @@ export const DashboardService = {
     updateAward,
     createAward,
     deleteAward,
+    upsertFraud,
+    getFraud,
+    upsertAboutUs,
+    getAboutUs
 };

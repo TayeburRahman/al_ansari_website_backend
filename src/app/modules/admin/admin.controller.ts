@@ -1,10 +1,10 @@
-import { Request, RequestHandler, Response } from 'express';  
+import { Request, RequestHandler, Response } from 'express';
 import catchAsync from '../../../shared/catchasync';
-const sendResponse = require("../../../shared/sendResponse");
-const { AdminService } = require("./admin.service"); 
+import sendResponse from '../../../shared/sendResponse';
+import { AdminService } from './admin.service';
 
 const myProfile = catchAsync(async (req: Request, res: Response) => {
-  const result = await AdminService.myProfile(req);
+  const result = await AdminService.myProfile(req as any);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -14,7 +14,7 @@ const myProfile = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const result = await AdminService.updateProfile(req);
+  const result = await AdminService.updateProfile(req as any);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -24,8 +24,8 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteMyAccount = catchAsync(async (req: Request, res: Response) => {
-  const email = req.params.email 
-  const result = await AdminService.deleteMyAccount(email);
+  const email = req.params.email
+  const result = await AdminService.deleteMyAccount(email as any);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -33,10 +33,10 @@ const deleteMyAccount = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
- 
+
 
 export const AdminController = {
   myProfile,
   updateProfile,
-  deleteMyAccount, 
+  deleteMyAccount,
 };
