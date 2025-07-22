@@ -1,57 +1,44 @@
 import { Types } from "mongoose";
 import { IPerson, IRequest, ISector } from "./dashboard.interface";
 import { About, Award, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, Terms, Updates } from "./dashboard.model";
-import AppError from "../../../errors/AppError";
 import ApiError from "../../../errors/ApiError";
+import Auth from "../auth/auth.model";
 
-const testData = [
-    {
-        "title": "Finalist at Middle East Legal Awards",
-        "image": "/assets/award (1).png",
-        "description": "Al-Ansari & Associates has been shortlisted by the Corporate Counsel Middle East Legal Awards 2019, an event hosted by the Association of Corporate Counsel Middle East and Legal Week. The nomination is for the Construction Team of the Year category."
-    },
-    {
-        "title": "Corporate Team of the Year",
-        "image": "/assets/award (2).png",
-        "description": "Al-Ansari & Associates has recently won the Middle East Legal Awards Corporate Team of the Year 2023 for drafting the key legislation 'establishing the legal framework for the World Cup'."
-    },
-    {
-        "title": "Finalist at Middle East Legal Awards",
-        "image": "/assets/award (3).png",
-        "description": "Al-Ansari & Associates has been shortlisted by the Corporate Counsel Middle East Legal Awards 2020, an event hosted by the Association of Corporate Counsel Middle East and Legal Week. The nomination is for the Arbitration Team of the Year category."
-    },
-    {
-        "title": "ACC Achievement Award",
-        "image": "/assets/award (4).png",
-        "description": "In May 2016 Al-Ansari & Associates beat strong competition from the Government of Dubai Legal Affairs Department, to win the Achievement Award, at the 2016 Association of Corporate Counsel (ACC) Middle East annual awards gala held in Dubai."
-    },
-    {
-        "title": "Middle East M&A Deal of the Year",
-        "image": "/assets/award (5).png",
-        "description": "In 2015, our firm won 'Middle East M&A Deal of the Year' at the M&A Atlas awards for our work on Labregah Real Estate's acquisition of Barwa Commercial Avenue in Barwa City and the sale of its stake in Barwa Bank."
-    },
-    {
-        "title": "Domestic Deal of the Year",
-        "image": "/assets/award (6).png",
-        "description": "We walked home with the award for 'Domestic Deal of the Year' at the International Financial Law Review 2014 Middle East Awards for our work on the sale of Barwa real estate assets."
-    },
-    {
-        "title": "M&A Deal of the Year",
-        "image": "/assets/award (7).png",
-        "description": "Al-Ansari & Associates won the International Financial Law Review ('IFLR') award as the Deal of the Year 2020 in the State of Qatar in M&A."
-    },
-    {
-        "title": "ACC Middle East Achievement Award",
-        "image": "/assets/award (8).png",
-        "description": "In May 2017, Mr. Salman Al-Ansari was awarded the ACC Middle East Achievement Award 2017 based on his work in relation to the promotion of the welfare of professional footballers in Qatar."
-    },
-    {
-        "title": "Recommended Law Firm",
-        "image": "/assets/award (9).png",
-        "description": "In 2014, Al-Ansari & Associates was highly recommended as a leading firm in corporate/commercial dispute resolution by Chambers and Partners."
-    }
 
-]
+
+const totalCount = async () => {
+  try {
+    // Run all the count queries in parallel
+    const [goldUsers, totalUpdates, totalEvents, totalNewsletters] = await Promise.all([
+      Auth.countDocuments(),
+      Updates.countDocuments(),
+      Events.countDocuments(),
+      Newsletters.countDocuments()
+    ]);
+
+    // Run the latest updates and events queries in parallel as well
+    const [latestEvents, latestUpdates] = await Promise.all([
+      Events.find({}).sort({ createdAt: -1 }).limit(5),
+      Updates.find({}).sort({ createdAt: -1 }).limit(5)
+    ]);
+
+    return {
+      count: {
+        goldUsers,
+        totalEvents,
+        totalNewsletters,
+        totalUpdates
+      },
+      latestUpdates,
+      latestEvents
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return { error: 'Error fetching data' }; // Optionally return an error message
+  }
+};
+
+
 
 const mapPersonFields = (body: any, profileImage?: string) => {
     const parseArray = (value: any): string[] => {
@@ -671,5 +658,6 @@ export const DashboardService = {
     upsertFraud,
     getFraud,
     upsertAboutUs,
-    getAboutUs
+    getAboutUs,
+    totalCount
 };

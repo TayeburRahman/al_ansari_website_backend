@@ -27,6 +27,20 @@ const updatePersonController = catchAsync(async (req: Request, res: Response) =>
     });
 });
 
+
+const totalCount = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await DashboardService.totalCount();
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Get successfully.',
+        data: result,
+    });
+});
+ 
+
 const getPersonByIdController = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await DashboardService.getPersonById(id);
@@ -517,5 +531,6 @@ export const DashboardController = {
     upsertFraudController,
     getFraudController,
     upsertAboutUsController,
-    getAboutUsController
+    getAboutUsController,
+    totalCount
 };

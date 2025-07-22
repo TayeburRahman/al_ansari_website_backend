@@ -9,6 +9,9 @@ const router = express.Router();
 // -------------------- Protected Routes -------------------- //
 // All routes require ADMIN or SUPER_ADMIN roles
 router.get('/search', DashboardController.getAllSearch);
+// 
+router.get('/total_count', DashboardController.totalCount);
+ 
 router.post(
     '/person',
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
