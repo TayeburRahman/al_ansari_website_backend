@@ -39,7 +39,7 @@ const totalCount = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
- 
+
 
 const getPersonByIdController = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
