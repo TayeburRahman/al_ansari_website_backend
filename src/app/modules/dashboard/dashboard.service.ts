@@ -7,35 +7,34 @@ import Auth from "../auth/auth.model";
 
 
 const totalCount = async () => {
-  try {
-    // Run all the count queries in parallel
-    const [goldUsers, totalUpdates, totalEvents, totalNewsletters] = await Promise.all([
-      Auth.countDocuments(),
-      Updates.countDocuments(),
-      Events.countDocuments(),
-      Newsletters.countDocuments()
-    ]);
+    try {
 
-    // Run the latest updates and events queries in parallel as well
-    const [latestEvents, latestUpdates] = await Promise.all([
-      Events.find({}).sort({ createdAt: -1 }).limit(5),
-      Updates.find({}).sort({ createdAt: -1 }).limit(5)
-    ]);
+        const [goldUsers, totalUpdates, totalEvents, totalNewsletters] = await Promise.all([
+            Auth.countDocuments(),
+            Updates.countDocuments(),
+            Events.countDocuments(),
+            Newsletters.countDocuments()
+        ]);
 
-    return {
-      count: {
-        goldUsers,
-        totalEvents,
-        totalNewsletters,
-        totalUpdates
-      },
-      latestUpdates,
-      latestEvents
-    };
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return { error: 'Error fetching data' }; // Optionally return an error message
-  }
+        const [latestEvents, latestUpdates] = await Promise.all([
+            Events.find({}).sort({ createdAt: -1 }).limit(5),
+            Updates.find({}).sort({ createdAt: -1 }).limit(5)
+        ]);
+
+        return {
+            count: {
+                goldUsers,
+                totalEvents,
+                totalNewsletters,
+                totalUpdates
+            },
+            latestUpdates,
+            latestEvents
+        };
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return { error: 'Error fetching data' };
+    }
 };
 
 
