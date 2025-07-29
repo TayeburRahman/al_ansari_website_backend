@@ -374,7 +374,7 @@ const updateAwardController = catchAsync(async (req: Request, res: Response) => 
 });
 
 const deleteAwardController = catchAsync(async (req: Request, res: Response) => {
-    const deleted = await DashboardService.deleteCSR(req.params.id);
+    const deleted = await DashboardService.deleteAward(req.params.id);
     sendResponse(res, {
         statusCode: deleted ? 200 : 404,
         success: deleted,

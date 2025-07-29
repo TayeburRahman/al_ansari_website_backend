@@ -487,7 +487,7 @@ const getPrivacyPolicy = async () => {
 const addDisclaimerPolicy = async (payload: any) => {
     const checkIsExist = await Disclaimer.findOne();
     if (checkIsExist) {
-        return await Privacy.findOneAndUpdate({}, payload, {
+        return await Disclaimer.findOneAndUpdate({}, payload, {
             new: true,
 
             runValidators: true,
