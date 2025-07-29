@@ -8,26 +8,26 @@ import bodyParser from 'body-parser';
 
 export const app: Application = express();
 
-app.use(
-  cors({
-    origin: [
-      'http://192.168.10.16:3000',
-      "http://localhost:3000",
-      "https://www.alansarilaw.com",
-      "https://alansarilaw.com",
-      "https://dashboard.alansarilaw.com",
-      "https://www.dashboard.alansarilaw.com",
-      "dashboard.alansarilaw.com",
-      "http://10.0.60.52:3000",
-      'http://13.62.48.83:5173',
-      "http://13.62.48.83:3000",
-      "http://10.0.60.199:3000",
-      "http://10.10.10.97:4173",
-      "http://localhost:4173",
-    ],
-    credentials: true,
-  }),
-);
+// app.use(
+//   cors({
+//     origin: [
+//       'http://192.168.10.16:3000',
+//       "http://localhost:3000",
+//       "https://www.alansarilaw.com",
+//       "https://alansarilaw.com",
+//       "https://dashboard.alansarilaw.com",
+//       "https://www.dashboard.alansarilaw.com",
+//       "dashboard.alansarilaw.com",
+//       "http://10.0.60.52:3000",
+//       'http://13.62.48.83:5173',
+//       "http://13.62.48.83:3000",
+//       "http://10.0.60.199:3000",
+//       "http://10.10.10.97:4173",
+//       "http://localhost:4173",
+//     ],
+//     credentials: true,
+//   }),
+// );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
