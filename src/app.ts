@@ -17,6 +17,7 @@ app.use(
       "https://alansarilaw.com",
       "https://dashboard.alansarilaw.com",
       "https://www.dashboard.alansarilaw.com",
+      "dashboard.alansarilaw.com",
       "http://10.0.60.52:3000",
       'http://13.62.48.83:5173',
       "http://13.62.48.83:3000",

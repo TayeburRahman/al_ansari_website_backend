@@ -5,7 +5,6 @@ import { DashboardRoutes } from '../modules/dashboard/dashboard.routes';
 const router = express.Router();
 
 const moduleRoutes = [
-  // -- done
   {
     path: '/auth',
     route: AuthRoutes,
