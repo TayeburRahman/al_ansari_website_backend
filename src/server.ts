@@ -56,7 +56,7 @@ main().catch(err => errorLogger.error(err));
 
 process.on('SIGTERM', () => {
   logger.info('SIGTERM is received');
-  if (server) {
-    server.close();
-  }
+  server.close(() => {
+    logger.info('Server closed gracefully');
+  });
 });

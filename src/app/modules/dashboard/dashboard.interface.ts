@@ -62,7 +62,7 @@ export interface ISubscriber extends Document {
 }
 
 export interface IAboutCount extends Document {
-    totalClients: number;
-    totalHours: number;
-    totalCases: number;
+    totalClients: string;
+    totalHours: string;
+    totalCases: string;
 }

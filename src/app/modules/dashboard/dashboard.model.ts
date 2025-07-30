@@ -106,9 +106,9 @@ const AboutSchema: Schema<IPrivacy> = new Schema({
 
 
 const AboutCountSchema: Schema = new Schema<IAboutCount>({
-    totalClients: { type: Number, required: true },
-    totalHours: { type: Number, required: true },
-    totalCases: { type: Number, required: true },
+    totalClients: { type: String, required: true },
+    totalHours: { type: String, required: true },
+    totalCases: { type: String, required: true },
 }, {
     timestamps: true,
 });
