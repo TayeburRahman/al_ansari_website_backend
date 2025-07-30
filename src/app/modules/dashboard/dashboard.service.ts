@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { IPerson, IRequest, ISector } from "./dashboard.interface";
-import { About, Award, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, Terms, Updates } from "./dashboard.model";
+import { About, AboutCount, Award, ContactForm, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, Subscriber, Terms, Updates } from "./dashboard.model";
 import ApiError from "../../../errors/ApiError";
 import Auth from "../auth/auth.model";
 
@@ -611,6 +611,73 @@ const getAboutUs = async () => {
     return await About.findOne();
 };
 
+// =========
+const submitContactForm = async (payload: any) => {
+    const result = await ContactForm.create(payload);
+    return result;
+};
+
+const getContactForms = async (page = 1, limit = 10) => {
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+        ContactForm.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+        ContactForm.countDocuments(),
+    ]);
+
+    return {
+        meta: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        },
+        data,
+    };
+};
+
+
+const submitSubscribe = async (payload: any) => {
+    // prevent duplicate subscriptions by email
+    const existing = await Subscriber.findOne({ email: payload.email });
+    if (existing) return existing;
+
+    const result = await Subscriber.create(payload);
+    return result;
+};
+
+const getSubscribers = async (page = 1, limit = 10) => {
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+        Subscriber.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+        Subscriber.countDocuments(),
+    ]);
+
+    return {
+        meta: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        },
+        data,
+    };
+};
+
+
+const upsertAboutCount = async (payload: any) => {
+    const result = await AboutCount.findOneAndUpdate(
+        {},
+        payload,
+        { new: true, upsert: true }
+    );
+    return result;
+};
+
+const getAboutCount = async () => {
+    const result = await AboutCount.findOne();
+    return result;
+};
+
 export const DashboardService = {
     getAllSearch,
     createPerson,
@@ -658,5 +725,11 @@ export const DashboardService = {
     getFraud,
     upsertAboutUs,
     getAboutUs,
-    totalCount
+    totalCount,
+    submitContactForm,
+    getContactForms,
+    getAboutCount,
+    upsertAboutCount,
+    getSubscribers,
+    submitSubscribe
 };

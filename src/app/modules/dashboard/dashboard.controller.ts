@@ -484,6 +484,72 @@ const getAboutUsController = catchAsync(async (_req: Request, res: Response) => 
         data: result,
     });
 });
+// ==========================
+const submitContactFromController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.submitContactForm(req.body);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Contact form submitted successfully.',
+        data: result,
+    });
+});
+
+const getContactFormController = catchAsync(async (req: Request, res: Response) => {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const result = await DashboardService.getContactForms(page, limit);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Contact forms retrieved successfully.',
+        data: result,
+    });
+});
+
+const submitSubscribeController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.submitSubscribe(req.body);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Subscription submitted successfully.',
+        data: result,
+    });
+});
+const getSubscribeController = catchAsync(async (req: Request, res: Response) => {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const result = await DashboardService.getSubscribers(page, limit);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Subscribers retrieved successfully.',
+        data: result,
+    });
+});
+
+const postAboutCountController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.upsertAboutCount(req.body);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'About count updated successfully.',
+        data: result,
+    });
+});
+const getAboutCountController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.getAboutCount();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'About count retrieved successfully.',
+        data: result,
+    });
+});
+
 
 export const DashboardController = {
     getAllSearch,
@@ -532,5 +598,11 @@ export const DashboardController = {
     getFraudController,
     upsertAboutUsController,
     getAboutUsController,
-    totalCount
+    totalCount,
+    submitContactFromController,
+    getContactFormController,
+    submitSubscribeController,
+    getSubscribeController,
+    postAboutCountController,
+    getAboutCountController
 };

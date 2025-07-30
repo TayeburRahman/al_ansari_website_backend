@@ -51,4 +51,18 @@ export interface ISector extends Document {
 export interface IPrivacy extends Document {
     description: string;
 }
+export interface IContactForm extends Document {
+    phone: string;
+    email: string;
+    message: string;
+}
 
+export interface ISubscriber extends Document {
+    email: string;
+}
+
+export interface IAboutCount extends Document {
+    totalClients: number;
+    totalHours: number;
+    totalCases: number;
+}

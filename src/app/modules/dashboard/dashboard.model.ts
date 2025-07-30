@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { IPerson, IPrivacy, ISector } from './dashboard.interface';
+import { IAboutCount, IContactForm, IPerson, IPrivacy, ISector, ISubscriber } from './dashboard.interface';
 
 const PersonSchema: Schema<IPerson> = new Schema({
     fullName: { type: String, required: true },
@@ -103,15 +103,38 @@ const AboutSchema: Schema<IPrivacy> = new Schema({
 }, {
     timestamps: true
 });
+
+
+const AboutCountSchema: Schema = new Schema<IAboutCount>({
+    totalClients: { type: Number, required: true },
+    totalHours: { type: Number, required: true },
+    totalCases: { type: Number, required: true },
+}, {
+    timestamps: true,
+});
+
+const SubscriberSchema: Schema = new Schema<ISubscriber>({
+    email: { type: String, required: true, unique: true },
+}, {
+    timestamps: true,
+});
+
+const ContactFormSchema: Schema = new Schema<IContactForm>({
+    phone: { type: String, required: true },
+    email: { type: String, required: true },
+    message: { type: String, required: true },
+}, {
+    timestamps: true,
+});
+
+const ContactForm: Model<IContactForm> = mongoose.model<IContactForm>('ContactForm', ContactFormSchema);
+const Subscriber: Model<ISubscriber> = mongoose.model<ISubscriber>('Subscriber', SubscriberSchema);
+const AboutCount: Model<IAboutCount> = mongoose.model<IAboutCount>('AboutCount', AboutCountSchema);
 const Newsletters: Model<ISector> = mongoose.model<ISector>('Newsletters', NewslettersSchema);
 const Events: Model<ISector> = mongoose.model<ISector>('Events', EventsSchema);
 const Updates: Model<ISector> = mongoose.model<ISector>('Update', UpdatesSchema);
 const Sector: Model<ISector> = mongoose.model<ISector>('Sector', SectorSchema);
 const Person: Model<IPerson> = mongoose.model<IPerson>('Person', PersonSchema);
-
-
-
-
 const Privacy: Model<IPrivacy> = mongoose.model<IPrivacy>('Privacy', PrivacySchema);
 const Terms: Model<IPrivacy> = mongoose.model<IPrivacy>('Terms', TermsSchema); const Fraud: Model<IPrivacy> = mongoose.model<IPrivacy>('Fraud', FraudSchema);
 const About: Model<IPrivacy> = mongoose.model<IPrivacy>('About', AboutSchema);
@@ -120,4 +143,4 @@ const Award: Model<ISector> = mongoose.model<ISector>('Award', awardSchema);
 
 const Disclaimer: Model<IPrivacy> = mongoose.model<IPrivacy>('Disclaimer', DisclaimerSchema);
 
-export { Person, Sector, Privacy, Terms, Fraud, Disclaimer, Updates, Events, Newsletters, CSR, Award, About };
+export { Person, Sector, Privacy, Terms, Fraud, Disclaimer, Updates, Events, Newsletters, CSR, Award, About, AboutCount, Subscriber, ContactForm };

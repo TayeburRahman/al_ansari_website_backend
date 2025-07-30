@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/search', DashboardController.getAllSearch);
 // 
 router.get('/total_count', DashboardController.totalCount);
- 
+
 router.post(
     '/person',
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
@@ -204,5 +204,13 @@ router.get('/privacy', DashboardController.getPrivacyController);
 // --- Disclaimer ---
 router.put('/disclaimer', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), DashboardController.upsertDisclaimerController);
 router.get('/disclaimer', DashboardController.getDisclaimerController);
-
+// --- Contact Form ---
+router.post('/contact_form', DashboardController.submitContactFromController);
+router.get('/get_contact_form', DashboardController.getContactFormController);
+// --- Subscribe ---
+router.post('/send_subscribe', DashboardController.submitSubscribeController);
+router.get('/get_subscribe', DashboardController.getSubscribeController);
+// --- About count ---
+router.post('/update_about_count', DashboardController.postAboutCountController);
+router.get('/get_about_count', DashboardController.getAboutCountController);
 export const DashboardRoutes = router;
