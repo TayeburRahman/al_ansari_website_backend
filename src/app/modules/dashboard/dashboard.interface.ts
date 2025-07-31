@@ -33,6 +33,7 @@ export interface IPerson extends Document {
     practice: [string];
     industry: [string];
     affiliation: string;
+    order: number;
     socialLinks: {
         facebook?: string;
         twitter?: string;
@@ -46,6 +47,14 @@ export interface ISector extends Document {
     title: string;
     description: string;
     image: string;
+}
+
+
+export interface IMedia extends Document {
+    facebook: string;
+    linkedin: string;
+    twitter: string;
+    instagram: string;
 }
 
 export interface IPrivacy extends Document {

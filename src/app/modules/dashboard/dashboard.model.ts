@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { IAboutCount, IContactForm, IPerson, IPrivacy, ISector, ISubscriber } from './dashboard.interface';
+import { IAboutCount, IContactForm, IMedia, IPerson, IPrivacy, ISector, ISubscriber } from './dashboard.interface';
 
 const PersonSchema: Schema<IPerson> = new Schema({
     fullName: { type: String, required: true },
@@ -13,7 +13,7 @@ const PersonSchema: Schema<IPerson> = new Schema({
     awards: [{ type: String, }],
     practice: [{ type: String, }],
     industry: [{ type: String, }],
-    // experience: { type: String, },
+    order: { type: Number, },
     // affiliation: { type: String, },
     category: { type: String, required: true },
     // socialLinks: {
@@ -49,6 +49,16 @@ const EventsSchema: Schema<ISector> = new Schema({
 }, {
     timestamps: true
 });
+
+const SocialMediaSchema: Schema<IMedia> = new Schema({
+    facebook: { type: String },
+    linkedin: { type: String },
+    twitter: { type: String },
+    instagram: { type: String }
+}, {
+    timestamps: true
+});
+
 const NewslettersSchema: Schema<ISector> = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -128,6 +138,8 @@ const ContactFormSchema: Schema = new Schema<IContactForm>({
 });
 
 const ContactForm: Model<IContactForm> = mongoose.model<IContactForm>('ContactForm', ContactFormSchema);
+const SocialMedia: Model<IMedia> = mongoose.model<IMedia>('SocialMedia', SocialMediaSchema);
+
 const Subscriber: Model<ISubscriber> = mongoose.model<ISubscriber>('Subscriber', SubscriberSchema);
 const AboutCount: Model<IAboutCount> = mongoose.model<IAboutCount>('AboutCount', AboutCountSchema);
 const Newsletters: Model<ISector> = mongoose.model<ISector>('Newsletters', NewslettersSchema);
@@ -143,4 +155,4 @@ const Award: Model<ISector> = mongoose.model<ISector>('Award', awardSchema);
 
 const Disclaimer: Model<IPrivacy> = mongoose.model<IPrivacy>('Disclaimer', DisclaimerSchema);
 
-export { Person, Sector, Privacy, Terms, Fraud, Disclaimer, Updates, Events, Newsletters, CSR, Award, About, AboutCount, Subscriber, ContactForm };
+export { SocialMedia, Person, Sector, Privacy, Terms, Fraud, Disclaimer, Updates, Events, Newsletters, CSR, Award, About, AboutCount, Subscriber, ContactForm };

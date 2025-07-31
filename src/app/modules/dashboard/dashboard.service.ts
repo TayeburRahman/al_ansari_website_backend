@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
-import { IPerson, IRequest, ISector } from "./dashboard.interface";
-import { About, AboutCount, Award, ContactForm, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, Subscriber, Terms, Updates } from "./dashboard.model";
+import { IMedia, IPerson, IRequest, ISector } from "./dashboard.interface";
+import { About, AboutCount, Award, ContactForm, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, SocialMedia, Subscriber, Terms, Updates } from "./dashboard.model";
 import ApiError from "../../../errors/ApiError";
 import Auth from "../auth/auth.model";
 
@@ -36,8 +36,6 @@ const totalCount = async () => {
         return { error: 'Error fetching data' };
     }
 };
-
-
 
 const mapPersonFields = (body: any, profileImage?: string) => {
     const parseArray = (value: any): string[] => {
@@ -82,18 +80,61 @@ const createPerson = async (req: IRequest): Promise<IPerson> => {
 
     const personData = mapPersonFields(body, profileImage);
 
+    const lastPerson = await Person.findOne().sort({ order: -1 }).select('order');
+    // Assign next order
+    // @ts-ignore
+    personData.order = lastPerson?.order !== undefined ? lastPerson.order + 1 : 0;
+
     const newPerson = await Person.create(personData);
     return newPerson;
 };
+
+const updatePeopleOrder = async (payload: { peopleIds: string[] }) => {
+    const { peopleIds } = payload;
+
+    if (!Array.isArray(peopleIds) || !peopleIds.every(id => typeof id === 'string')) {
+        throw new ApiError(400, 'Invalid data: orderedIds must be an array of strings');
+    }
+
+    const bulkOps = peopleIds.map((id, index) => ({
+        updateOne: {
+            filter: { _id: id },
+            update: { $set: { order: index } },
+        },
+    }));
+
+    const result = await Person.bulkWrite(bulkOps);
+    return result;
+};
+
+const addOrUpdateSocialMedia = async (payload: Partial<IMedia>) => {
+    const exist = await SocialMedia.findOne();
+    let result;
+    if (exist) {
+        result = await SocialMedia.findOneAndUpdate({}, payload, { new: true, runValidators: true });
+    } else {
+        // Create the first document
+        result = await SocialMedia.create(payload);
+    }
+
+    return result;
+};
+
+const getSocialMedia = async () => {
+    const result = await SocialMedia.findOne();
+    return result;
+};
+
+
 
 const getAllPeople = async (req: any): Promise<IPerson[]> => {
     const category = req?.query?.category;
 
     if (category) {
-        return await Person.find({ category });
+        return await Person.find({ category }).sort({ order: 1 });
     }
 
-    return await Person.find()
+    return await Person.find().sort({ order: 1 });
 };
 
 const getAllSearch = async (req: any) => {
@@ -679,6 +720,7 @@ const getAboutCount = async () => {
 };
 
 export const DashboardService = {
+    getSocialMedia,
     getAllSearch,
     createPerson,
     getAllPeople,
@@ -731,5 +773,7 @@ export const DashboardService = {
     getAboutCount,
     upsertAboutCount,
     getSubscribers,
-    submitSubscribe
+    submitSubscribe,
+    updatePeopleOrder,
+    addOrUpdateSocialMedia
 };

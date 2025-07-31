@@ -36,10 +36,27 @@ router.put(
     DashboardController.updatePersonController
 );
 
+router.put(
+    '/person_update_order_id',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.updatePersonOrderController
+);
+
 router.delete(
     '/person/:id',
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
     DashboardController.deletePersonController
+);
+// ======================
+router.post(
+    '/social_media',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.addOrUpdateSocialMedia
+);
+router.get(
+    '/social_media',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    DashboardController.getSocialMedia
 );
 // ======================
 router.post(

@@ -53,6 +53,43 @@ const getPersonByIdController = catchAsync(async (req: Request, res: Response) =
     });
 });
 
+const updatePersonOrderController = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.updatePeopleOrder(req.body);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "People order updated successfully",
+        data: result,
+    });
+});
+
+const addOrUpdateSocialMedia = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.addOrUpdateSocialMedia(req.body);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Updated successfully",
+        data: result,
+    });
+});
+
+const getSocialMedia = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.getSocialMedia();
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "get successfully",
+        data: result,
+    });
+});
+
+
+
+
+
 const getAllPeopleController = catchAsync(async (req: Request, res: Response) => {
     const result = await DashboardService.getAllPeople(req as any);
     sendResponse(res, {
@@ -552,6 +589,7 @@ const getAboutCountController = catchAsync(async (req: Request, res: Response) =
 
 
 export const DashboardController = {
+    getSocialMedia,
     getAllSearch,
     getAllPeopleController,
     getPersonByIdController,
@@ -604,5 +642,7 @@ export const DashboardController = {
     submitSubscribeController,
     getSubscribeController,
     postAboutCountController,
-    getAboutCountController
+    getAboutCountController,
+    updatePersonOrderController,
+    addOrUpdateSocialMedia
 };
