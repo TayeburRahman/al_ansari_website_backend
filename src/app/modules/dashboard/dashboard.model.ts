@@ -14,14 +14,15 @@ const PersonSchema: Schema<IPerson> = new Schema({
     practice: [{ type: String, }],
     industry: [{ type: String, }],
     order: { type: Number, },
-    // affiliation: { type: String, },
+    affiliation: { type: String, },
+    experience: { type: String, },
     category: { type: String, required: true },
-    // socialLinks: {
-    //     facebook: { type: String },
-    //     twitter: { type: String },
-    //     instagram: { type: String },
-    //     linkedin: { type: String }
-    // },
+    socialLinks: {
+        facebook: { type: String },
+        twitter: { type: String },
+        instagram: { type: String },
+        linkedin: { type: String }
+    },
     profile_image: { type: String }
 }, {
     timestamps: true
