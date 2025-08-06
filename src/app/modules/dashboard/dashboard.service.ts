@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
-import { IMedia, IPerson, IRequest, ISector } from "./dashboard.interface";
-import { About, AboutCount, Award, ContactForm, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, SocialMedia, Subscriber, Terms, Updates } from "./dashboard.model";
+import { IContent, IMedia, IPerson, IRequest, ISector } from "./dashboard.interface";
+import { About, AboutCount, Award, ContactForm, Content, CSR, Disclaimer, Events, Fraud, Newsletters, Person, Privacy, Sector, SocialMedia, Subscriber, Terms, Updates } from "./dashboard.model";
 import ApiError from "../../../errors/ApiError";
 import Auth from "../auth/auth.model";
 
@@ -124,8 +124,41 @@ const getSocialMedia = async () => {
     const result = await SocialMedia.findOne();
     return result;
 };
+const addOrUpdateContent = async (req: IRequest): Promise<IContent> => {
+    try {
+        const { body, files } = req as any;
+        console.log("files", body);
+        const imageHero = files?.imageHero?.[0]?.filename
+            ? `/images/content/${files.imageHero[0].filename}`
+            : undefined;
 
+        const payload: Partial<IContent> = {
+            ...(imageHero && { imageHero }),
+            textHero: body.textHero,
+        };
 
+        let result = await Content.findOne();
+
+        if (result) {
+            result = await Content.findOneAndUpdate({}, payload, {
+                new: true,
+                runValidators: true,
+            });
+        } else {
+            result = await Content.create(payload);
+        }
+
+        return result as IContent;
+    } catch (error: any) {
+        console.error("Error in addOrUpdateContent:", error);
+        throw new Error("Failed to add or update Content.");
+    }
+};
+
+const getContent = async () => {
+    const result = await Content.findOne();
+    return result;
+};
 
 const getAllPeople = async (req: any): Promise<IPerson[]> => {
     const category = req?.query?.category;
@@ -175,8 +208,6 @@ const getAllSearch = async (req: any) => {
         throw new ApiError(404, "Something went wrong");
     }
 };
-
-
 
 const getPersonById = async (id: string): Promise<IPerson | null> => {
     if (!Types.ObjectId.isValid(id)) return null;
@@ -775,5 +806,7 @@ export const DashboardService = {
     getSubscribers,
     submitSubscribe,
     updatePeopleOrder,
-    addOrUpdateSocialMedia
+    addOrUpdateSocialMedia,
+    addOrUpdateContent,
+    getContent
 };

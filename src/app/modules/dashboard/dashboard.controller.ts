@@ -440,6 +440,26 @@ const getTermsController = catchAsync(async (_req: Request, res: Response) => {
         data: result,
     });
 });
+// ================================ 
+const addOrUpdateContent = catchAsync(async (req: Request, res: Response) => {
+    const result = await DashboardService.addOrUpdateContent(req as any);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Updated successfully.',
+        data: result,
+    });
+});
+
+const getContent = catchAsync(async (_req: Request, res: Response) => {
+    const result = await DashboardService.getContent();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Content retrieved successfully.',
+        data: result,
+    });
+});
 
 const upsertPrivacyController = catchAsync(async (req: Request, res: Response) => {
     const result = await DashboardService.addPrivacyPolicy(req.body);
@@ -644,5 +664,7 @@ export const DashboardController = {
     postAboutCountController,
     getAboutCountController,
     updatePersonOrderController,
-    addOrUpdateSocialMedia
+    addOrUpdateSocialMedia,
+    addOrUpdateContent,
+    getContent
 };

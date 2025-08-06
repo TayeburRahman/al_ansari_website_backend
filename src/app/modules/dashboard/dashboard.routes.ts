@@ -9,7 +9,7 @@ const router = express.Router();
 // -------------------- Protected Routes -------------------- //
 // All routes require ADMIN or SUPER_ADMIN roles
 router.get('/search', DashboardController.getAllSearch);
-// 
+//------
 router.get('/total_count', DashboardController.totalCount);
 
 router.post(
@@ -230,4 +230,10 @@ router.get('/get_subscribe', DashboardController.getSubscribeController);
 // --- About count ---
 router.post('/update_about_count', DashboardController.postAboutCountController);
 router.get('/get_about_count', DashboardController.getAboutCountController);
+// --- Content ---
+router.post('/update_content',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+    uploadFile(),
+    DashboardController.addOrUpdateContent);
+router.get('/get_content', DashboardController.getContent);
 export const DashboardRoutes = router;

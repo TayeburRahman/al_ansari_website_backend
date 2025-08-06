@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { IAboutCount, IContactForm, IMedia, IPerson, IPrivacy, ISector, ISubscriber } from './dashboard.interface';
+import { IAboutCount, IContactForm, IContent, IMedia, IPerson, IPrivacy, ISector, ISubscriber } from './dashboard.interface';
 
 const PersonSchema: Schema<IPerson> = new Schema({
     fullName: { type: String, required: true },
@@ -137,9 +137,16 @@ const ContactFormSchema: Schema = new Schema<IContactForm>({
     timestamps: true,
 });
 
+const HomePageSchema: Schema = new Schema<IContent>({
+    imageHero: { type: String },
+    textHero: { type: String, required: true },
+}, {
+    timestamps: true,
+});
+
 const ContactForm: Model<IContactForm> = mongoose.model<IContactForm>('ContactForm', ContactFormSchema);
 const SocialMedia: Model<IMedia> = mongoose.model<IMedia>('SocialMedia', SocialMediaSchema);
-
+const Content: Model<IContent> = mongoose.model<IContent>('Content', HomePageSchema);
 const Subscriber: Model<ISubscriber> = mongoose.model<ISubscriber>('Subscriber', SubscriberSchema);
 const AboutCount: Model<IAboutCount> = mongoose.model<IAboutCount>('AboutCount', AboutCountSchema);
 const Newsletters: Model<ISector> = mongoose.model<ISector>('Newsletters', NewslettersSchema);
@@ -155,4 +162,4 @@ const Award: Model<ISector> = mongoose.model<ISector>('Award', awardSchema);
 
 const Disclaimer: Model<IPrivacy> = mongoose.model<IPrivacy>('Disclaimer', DisclaimerSchema);
 
-export { SocialMedia, Person, Sector, Privacy, Terms, Fraud, Disclaimer, Updates, Events, Newsletters, CSR, Award, About, AboutCount, Subscriber, ContactForm };
+export { SocialMedia, Person, Sector, Privacy, Terms, Fraud, Disclaimer, Updates, Events, Newsletters, CSR, Award, About, AboutCount, Subscriber, ContactForm, Content };

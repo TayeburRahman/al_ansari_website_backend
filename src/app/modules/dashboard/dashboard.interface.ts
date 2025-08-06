@@ -66,6 +66,10 @@ export interface IContactForm extends Document {
     message: string;
 }
 
+export interface IContent extends Document {
+    imageHero: string;
+    textHero: string;
+}
 export interface ISubscriber extends Document {
     email: string;
 }
