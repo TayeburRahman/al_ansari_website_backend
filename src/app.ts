@@ -13,6 +13,8 @@ app.use(
     origin: [
       'http://192.168.10.16:3000',
       "http://localhost:3000",
+      "http://10.10.20.70:3001",
+      "http://10.10.20.72:4173",
       "https://www.alansarilaw.com",
       "https://alansarilaw.com",
       "https://dashboard.alansarilaw.com",
@@ -22,7 +24,6 @@ app.use(
       'http://13.62.48.83:5173',
       "http://13.62.48.83:3000",
       "http://10.0.60.199:3000",
-      "http://10.10.10.97:4173",
       "http://localhost:4173",
       'https://dashboard.alansarilaw.com'
     ],
