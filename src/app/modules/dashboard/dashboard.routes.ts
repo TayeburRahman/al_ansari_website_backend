@@ -55,7 +55,6 @@ router.post(
 );
 router.get(
     '/social_media',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
     DashboardController.getSocialMedia
 );
 // ======================
@@ -235,5 +234,6 @@ router.post('/update_content',
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
     uploadFile(),
     DashboardController.addOrUpdateContent);
+
 router.get('/get_content', DashboardController.getContent);
 export const DashboardRoutes = router;
